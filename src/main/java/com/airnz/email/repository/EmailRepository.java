@@ -4,7 +4,6 @@ import com.airnz.email.model.EmailAddress;
 import com.airnz.email.model.EmailMessage;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,7 +51,7 @@ public class EmailRepository implements CommandLineRunner {
                 "Hi Leonard, Please call me urgently. Thanks Sheldon",
                 new EmailAddress("Sheldon Cooper", "sheldon.cooper@mail.com"),
                 new EmailAddress("Sheldon Cooper", "sheldon.cooper@mail.com"),
-                Arrays.asList(new EmailAddress("Leonard Hofstadter", "leonard,hofstadter@mail.com"),
+                Arrays.asList(new EmailAddress("Leonard Hofstadter", "leonard.hofstadter@mail.com"),
                               new EmailAddress("Penny", "penny@mail.com")),
                 null,
                 null);

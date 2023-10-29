@@ -1,6 +1,7 @@
 package com.airnz.email.controller;
 
 import com.airnz.email.model.EmailMessage;
+import com.airnz.email.model.EmailMessageRequest;
 import com.airnz.email.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,8 +29,8 @@ public class EmailController {
     }
 
     @PostMapping("/v1/emails")
-    public ResponseEntity<EmailMessage> createEmailDraft(@RequestBody EmailMessage emailMessageRequest){
-        EmailMessage emailMessageResponse = emailService.createEmailDraft(emailMessageRequest);
-        return new ResponseEntity<>(emailMessageResponse, HttpStatus.CREATED);
+    public ResponseEntity<EmailMessage> createEmailDraft(@RequestBody EmailMessageRequest emailMessageRequest){
+        EmailMessage emailMessage = emailService.createEmailDraft(emailMessageRequest);
+        return new ResponseEntity<>(emailMessage, HttpStatus.CREATED);
     }
 }
