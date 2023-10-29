@@ -4,10 +4,12 @@ import com.airnz.email.model.EmailMessage;
 import com.airnz.email.model.EmailMessageRequest;
 
 import java.util.List;
+import java.util.Map;
 
 public interface EmailService {
-    public List<EmailMessage> getEmailMessages();
-    public EmailMessage getEmailMessage(Long id);
-    public EmailMessage createEmailDraft(EmailMessageRequest emailMessageRequest);
-    public void sendEmail(Long id);
+    List<EmailMessage> getEmailMessages();
+    EmailMessage getEmailMessage(Long id);
+    EmailMessage createEmailDraft(EmailMessageRequest emailMessageRequest);
+    void sendEmail(Long id);
+    EmailMessage updateEmail(Long id, Map<String, Object> fields);
 }

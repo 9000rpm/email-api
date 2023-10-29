@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @RestController
 public class EmailController {
@@ -23,7 +25,7 @@ public class EmailController {
     }
 
     @GetMapping("/v1/emails/{id}")
-    public ResponseEntity<EmailMessage> getEmail(@PathVariable(required = true) Long id){
+    public ResponseEntity<EmailMessage> getEmail(@PathVariable Long id){
         EmailMessage emailMessage = emailService.getEmailMessage(id);
         return new ResponseEntity<>(emailMessage, HttpStatus.OK);
     }
@@ -36,8 +38,14 @@ public class EmailController {
 
     // This API will send an already existing draft email
     @PostMapping("/v1/emails/{id}/send")
-    public ResponseEntity<Void> sendEmail(@PathVariable(required = true) Long id){
+    public ResponseEntity<Void> sendEmail(@PathVariable Long id){
         emailService.sendEmail(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping("/v1/emails/{id}")
+    public ResponseEntity<EmailMessage> updateEmail(@PathVariable Long id,@RequestBody Map<String, Object> fields){
+        EmailMessage emailMessage = emailService.updateEmail(id, fields);
+        return new ResponseEntity<>(emailMessage, HttpStatus.OK);
     }
 }

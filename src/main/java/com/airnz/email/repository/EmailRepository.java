@@ -23,8 +23,8 @@ public class EmailRepository implements CommandLineRunner {
     public EmailMessage getEmailMessage(Long id)
     {
         List<EmailMessage> result = emailMessages.stream()
-                                            .filter(value -> value.getId() == id)
-                                            .collect(Collectors.toList());
+                                            .filter(value -> value.getId().longValue() == id)
+                                            .toList();
         if (result.size() != 1) {
             throw new IllegalStateException("Could not find exactly one user, got: " + result);
         }

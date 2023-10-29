@@ -10,10 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 @Service
 public class EmailServiceImpl implements EmailService {
 
@@ -113,6 +117,24 @@ public class EmailServiceImpl implements EmailService {
         // sending email
         // javaMailSender.send(simpleMailMessage);
         log.info("Email sent successfully.");
+    }
+
+    @Override
+    public EmailMessage updateEmail(Long id, Map<String, Object> fields) {
+        EmailMessage emailMessage = emailRepository.getEmailMessage(id);
+        fields.forEach((key, value)->{
+            // system some fields should not be allowed to be updated
+            if (!key.equals("isRead")
+                    && !key.equals("isDraft")
+                    && !key.equals("createdDateTime")
+                    && !key.equals("receivedDateTime")
+                    && !key.equals("sentDateTime")){
+                Field field = ReflectionUtils.findField(EmailMessage.class, key);
+                field.setAccessible(true);
+                ReflectionUtils.setField(field, emailMessage, value);
+            }
+        });
+        return emailMessage;
     }
 
 }
