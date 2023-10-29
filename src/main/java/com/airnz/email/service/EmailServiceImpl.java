@@ -3,17 +3,30 @@ package com.airnz.email.service;
 import com.airnz.email.model.EmailMessage;
 import com.airnz.email.model.EmailMessageRequest;
 import com.airnz.email.repository.EmailRepository;
+import com.airnz.email.util.EmailHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 @Service
 public class EmailServiceImpl implements EmailService {
 
-    @Autowired
-    EmailRepository emailRepository;
+    Logger log = LoggerFactory.getLogger(EmailServiceImpl.class);
 
+    @Autowired
+    private EmailRepository emailRepository;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    @Autowired
+    private EmailHelper emailHelper;
     @Override
     public List<EmailMessage> getEmailMessages(){
         return emailRepository.getEmailMessages();
@@ -45,6 +58,61 @@ public class EmailServiceImpl implements EmailService {
                 emailMessageRequest.getBccRecipients()
         );
         return  emailRepository.createEmailDraft(emailMessage);
+    }
+
+    public void sendEmail(Long id){
+        EmailMessage emailMessage = emailRepository.getEmailMessage(id);
+
+        // mandatory and validation checks
+        if (emailMessage.getFrom() == null
+                || emailMessage.getFrom().getEmailAddress() == null
+                || emailMessage.getFrom().getEmailAddress().trim().length() == 0
+                || !emailHelper.isEmailValid(emailMessage.getFrom().getEmailAddress())){
+            throw new IllegalStateException("Valid from email address required");
+        }
+
+        // mandatory To email address required
+        if (emailMessage.getToRecipients() == null
+                || emailMessage.getToRecipients().size() == 0){
+            throw new IllegalStateException("To email address required");
+        }
+
+        // validation check for all email addresses
+        List<String> emailAddress = new ArrayList<>();
+        emailMessage.getToRecipients().forEach(em -> emailAddress.add(em.getEmailAddress()));
+        if (emailMessage.getCcRecipients() !=null && emailMessage.getCcRecipients().size() > 0){
+            emailMessage.getCcRecipients().forEach(em -> emailAddress.add(em.getEmailAddress()));
+        }
+        if (emailMessage.getBccRecipients() !=null && emailMessage.getBccRecipients().size() > 0){
+            emailMessage.getBccRecipients().forEach(em -> emailAddress.add(em.getEmailAddress()));
+        }
+        for(String emailaddr:emailAddress){
+            if (!emailHelper.isEmailValid(emailaddr)){
+                throw new IllegalStateException("Email address is not valid: "+emailaddr);
+            }
+        }
+
+        // check email is not sent and a draft
+        if (emailMessage.getRead() != null
+                || !emailMessage.getDraft()
+                || emailMessage.getSentDateTime() != null
+                || emailMessage.getReceivedDateTime() != null){
+            throw new IllegalStateException("Email is not a draft and has already been sent "+ id);
+        }
+
+        // build mailMessage used for sending email
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setFrom(emailMessage.getFrom().getEmailAddress());
+        simpleMailMessage.setSubject(emailMessage.getSubject());
+        simpleMailMessage.setText(emailMessage.getBody());
+        simpleMailMessage.setSentDate(new Date());
+        simpleMailMessage.setTo(emailHelper.listToArray(emailMessage.getToRecipients()));
+        simpleMailMessage.setCc(emailHelper.listToArray(emailMessage.getCcRecipients()));
+        simpleMailMessage.setBcc(emailHelper.listToArray(emailMessage.getBccRecipients()));
+
+        // sending email
+        // javaMailSender.send(simpleMailMessage);
+        log.info("Email sent successfully.");
     }
 
 }

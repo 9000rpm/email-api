@@ -14,7 +14,7 @@ import java.util.List;
 public class EmailController {
 
     @Autowired
-    EmailService emailService;
+    private EmailService emailService;
 
     @GetMapping("/v1/emails")
     public ResponseEntity<List<EmailMessage>> getEmails(){
@@ -32,5 +32,12 @@ public class EmailController {
     public ResponseEntity<EmailMessage> createEmailDraft(@RequestBody EmailMessageRequest emailMessageRequest){
         EmailMessage emailMessage = emailService.createEmailDraft(emailMessageRequest);
         return new ResponseEntity<>(emailMessage, HttpStatus.CREATED);
+    }
+
+    // This API will send an already existing draft email
+    @PostMapping("/v1/emails/{id}/send")
+    public ResponseEntity<Void> sendEmail(@PathVariable(required = true) Long id){
+        emailService.sendEmail(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

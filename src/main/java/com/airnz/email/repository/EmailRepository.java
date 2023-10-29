@@ -49,10 +49,10 @@ public class EmailRepository implements CommandLineRunner {
                 false,
                 "text/plain",
                 "Hi Leonard, Please call me urgently. Thanks Sheldon",
-                new EmailAddress("Sheldon Cooper", "sheldon.cooper@mail.com"),
-                new EmailAddress("Sheldon Cooper", "sheldon.cooper@mail.com"),
-                Arrays.asList(new EmailAddress("Leonard Hofstadter", "leonard.hofstadter@mail.com"),
-                              new EmailAddress("Penny", "penny@mail.com")),
+                new EmailAddress("sheldon.cooper@mail.com", "Sheldon Cooper"),
+                new EmailAddress("sheldon.cooper@mail.com", "Sheldon Cooper"),
+                Arrays.asList(new EmailAddress("leonard.hofstadter@mail.com", "Leonard Hofstadter"),
+                              new EmailAddress("penny@mail.com", "Penny")),
                 null,
                 null);
         emailMessages.add(emailMessage);
@@ -68,9 +68,9 @@ public class EmailRepository implements CommandLineRunner {
                 false,
                 "text/plain",
                 "Penny, Penny, Penny!",
-                new EmailAddress("Sheldon Cooper", "sheldon.cooper@mail.com"),
-                new EmailAddress("Sheldon Cooper", "sheldon.cooper@mail.com"),
-                Arrays.asList(new EmailAddress("Penny", "penny@mail.com")),
+                new EmailAddress("sheldon.cooper@mail.com", "Sheldon Cooper"),
+                new EmailAddress("sheldon.cooper@mail.com", "Sheldon Cooper"),
+                Arrays.asList(new EmailAddress("penny@mail.com", "penny")),
                 null,
                 null);
         emailMessages.add(emailMessage);

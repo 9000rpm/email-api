@@ -6,7 +6,8 @@ import com.airnz.email.model.EmailMessageRequest;
 import java.util.List;
 
 public interface EmailService {
-    List<EmailMessage> getEmailMessages();
-    EmailMessage getEmailMessage(Long id);
-    EmailMessage createEmailDraft(EmailMessageRequest emailMessageRequest);
+    public List<EmailMessage> getEmailMessages();
+    public EmailMessage getEmailMessage(Long id);
+    public EmailMessage createEmailDraft(EmailMessageRequest emailMessageRequest);
+    public void sendEmail(Long id);
 }
