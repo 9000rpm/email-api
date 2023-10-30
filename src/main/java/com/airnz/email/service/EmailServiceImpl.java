@@ -1,5 +1,6 @@
 package com.airnz.email.service;
 
+import com.airnz.email.exceptions.InvalidRequestException;
 import com.airnz.email.model.EmailMessage;
 import com.airnz.email.model.EmailMessageRequest;
 import com.airnz.email.repository.EmailRepository;
@@ -64,7 +65,7 @@ public class EmailServiceImpl implements EmailService {
         return  emailRepository.createEmailDraft(emailMessage);
     }
 
-    public void sendEmail(Long id){
+    public void sendEmail(Long id) throws InvalidRequestException {
         EmailMessage emailMessage = emailRepository.getEmailMessage(id);
 
         // mandatory and validation checks
@@ -72,13 +73,13 @@ public class EmailServiceImpl implements EmailService {
                 || emailMessage.getFrom().getEmailAddress() == null
                 || emailMessage.getFrom().getEmailAddress().trim().length() == 0
                 || !emailHelper.isEmailValid(emailMessage.getFrom().getEmailAddress())){
-            throw new IllegalStateException("Valid from email address required");
+            throw new InvalidRequestException("Valid from email address required");
         }
 
         // mandatory To email address required
         if (emailMessage.getToRecipients() == null
                 || emailMessage.getToRecipients().size() == 0){
-            throw new IllegalStateException("To email address required");
+            throw new InvalidRequestException("To email address required");
         }
 
         // validation check for all email addresses
@@ -92,7 +93,7 @@ public class EmailServiceImpl implements EmailService {
         }
         for(String emailaddr:emailAddress){
             if (!emailHelper.isEmailValid(emailaddr)){
-                throw new IllegalStateException("Email address is not valid: "+emailaddr);
+                throw new InvalidRequestException("Email address is not valid: "+emailaddr);
             }
         }
 
@@ -101,7 +102,7 @@ public class EmailServiceImpl implements EmailService {
                 || !emailMessage.getDraft()
                 || emailMessage.getSentDateTime() != null
                 || emailMessage.getReceivedDateTime() != null){
-            throw new IllegalStateException("Email is not a draft and has already been sent "+ id);
+            throw new InvalidRequestException("Email is not a draft and has already been sent "+ id);
         }
 
         // build mailMessage used for sending email

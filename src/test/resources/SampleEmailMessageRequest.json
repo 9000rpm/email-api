@@ -1,0 +1,23 @@
+{
+  "subject": "That is my spot!",
+  "importance": "normal",
+  "hasAttachments": false,
+  "contentType": "text/plain",
+  "body": "Hi Rajesh, please can you move off my spot!",
+  "sender": {
+    "emailAddress": "sheldon.cooper@mail.com",
+    "name": "Sheldon Cooper"
+  },
+  "from": {
+    "emailAddress": "sheldon.cooper@mail.com",
+    "name": "Sheldon Cooper"
+  },
+  "toRecipients": [
+    {
+      "emailAddress": "rajesh@mail.com",
+      "name": "Rajesh"
+    }
+  ],
+  "ccRecipients": null,
+  "bccRecipients": null
+}

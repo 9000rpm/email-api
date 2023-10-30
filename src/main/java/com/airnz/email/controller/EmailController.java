@@ -1,8 +1,11 @@
 package com.airnz.email.controller;
 
+import com.airnz.email.exceptions.InvalidRequestException;
 import com.airnz.email.model.EmailMessage;
 import com.airnz.email.model.EmailMessageRequest;
 import com.airnz.email.service.EmailService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +17,7 @@ import java.util.Map;
 @RestController
 public class EmailController {
 
+    Logger log = LoggerFactory.getLogger(EmailController.class);
     @Autowired
     private EmailService emailService;
 
@@ -38,7 +42,12 @@ public class EmailController {
     // This API will send an already existing draft email
     @PostMapping("/v1/emails/{id}/send")
     public ResponseEntity<Void> sendEmail(@PathVariable Long id){
-        emailService.sendEmail(id);
+        try{
+            emailService.sendEmail(id);
+        } catch (InvalidRequestException error){
+            log.error("Error: ", error);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
