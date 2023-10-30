@@ -11,5 +11,5 @@ public interface EmailService {
     EmailMessage getEmailMessage(Long id);
     EmailMessage createEmailDraft(EmailMessageRequest emailMessageRequest);
     void sendEmail(Long id);
-    EmailMessage updateEmail(Long id, Map<String, Object> fields);
+    EmailMessage updateDraft(Long id, Map<String, Object> fields);
 }

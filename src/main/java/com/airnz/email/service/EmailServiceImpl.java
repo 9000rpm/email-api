@@ -120,10 +120,10 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public EmailMessage updateEmail(Long id, Map<String, Object> fields) {
+    public EmailMessage updateDraft(Long id, Map<String, Object> fields) {
         EmailMessage emailMessage = emailRepository.getEmailMessage(id);
         fields.forEach((key, value)->{
-            // system some fields should not be allowed to be updated
+            // system fields should not be allowed to be updated
             if (!key.equals("isRead")
                     && !key.equals("isDraft")
                     && !key.equals("createdDateTime")

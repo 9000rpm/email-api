@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 public class EmailController {
@@ -44,8 +43,8 @@ public class EmailController {
     }
 
     @PatchMapping("/v1/emails/{id}")
-    public ResponseEntity<EmailMessage> updateEmail(@PathVariable Long id,@RequestBody Map<String, Object> fields){
-        EmailMessage emailMessage = emailService.updateEmail(id, fields);
+    public ResponseEntity<EmailMessage> updateDraft(@PathVariable Long id,@RequestBody Map<String, Object> fields){
+        EmailMessage emailMessage = emailService.updateDraft(id, fields);
         return new ResponseEntity<>(emailMessage, HttpStatus.OK);
     }
 }
