@@ -117,6 +117,10 @@ public class EmailServiceImpl implements EmailService {
         // sending email
         // javaMailSender.send(simpleMailMessage);
         log.info("Email sent successfully.");
+
+        // once email is sent, update draft and sent date/time
+        emailMessage.setDraft(false);
+        emailMessage.setSentDateTime(new Date());
     }
 
     @Override
